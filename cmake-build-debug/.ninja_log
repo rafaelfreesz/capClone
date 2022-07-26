@@ -1,8 +1,6 @@
 # ninja log v5
-0	253	1658261147926414886	CMakeFiles/capClone.dir/main.cpp.o	523d1d32eddaaaee
-253	334	1658261148006414936	capClone	6923a91a5240dfb7
-1	19	1658261253413984803	CMakeFiles/capClone.dir/Instance.cpp.o	8c6ea8ce4c2ba433
-1	231	1658261253625980913	CMakeFiles/capClone.dir/main.cpp.o	523d1d32eddaaaee
-231	290	1658261253685979812	capClone	43ef4e9471412e74
-1	249	1658261260837850946	CMakeFiles/capClone.dir/main.cpp.o	523d1d32eddaaaee
-249	308	1658261260893849952	capClone	43ef4e9471412e74
+1	407	1658852819331932268	CMakeFiles/capClone.dir/Instance.cpp.o	8c6ea8ce4c2ba433
+2	509	1658852205652894029	CMakeFiles/capClone.dir/Utils.cpp.o	89e281e106cb236b
+1	3697	1658852173644549341	CMakeFiles/capClone.dir/main.cpp.o	523d1d32eddaaaee
+0	4	0	clean	34c097af3dcb6006
+407	490	1658852819415931771	capClone	107db961966e183e

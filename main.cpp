@@ -1,9 +1,16 @@
 #include <iostream>
 #include "Instance.h"
+#include "Utils.h"
+#include <vector>
+
 using namespace std;
+
+
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    Instance* instance = new Instance();
+
+    vector<Instance*> instances = Utils::loadInstances();
 
     return 0;
 }
+
