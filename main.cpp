@@ -1,10 +1,10 @@
 #include <iostream>
 #include "Instance.h"
 #include "Utils.h"
+#include "Antigen.h"
 #include <vector>
 
 using namespace std;
-
 
 
 int main() {
@@ -13,4 +13,5 @@ int main() {
 
     return 0;
 }
+
 

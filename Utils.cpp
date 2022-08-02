@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include "Utils.h"
+#include "Antigen.h"
 
 vector <Instance*> Utils::loadInstances() {
     vector<Instance*> instances;
@@ -72,4 +73,28 @@ void Utils::tokenize(string str, vector<string> &token_v, string DELIMITER) {
         token_v.push_back(str.substr(start, end-start));
         start = str.find_first_not_of(DELIMITER, end);
     }
+}
+
+void Utils::testInstance(vector<Instance *> instances) {
+    int i=0;
+    while(instances.at(i)->name!="S10"){i++;}
+
+    Instance* instance=instances.at(i);
+    instance->print();
+
+    Antigen* antigen = new Antigen(instance);
+
+    string layoutConf="5,1,3,4,6,8,2,0,9,7,6";
+
+    vector<string> tokens;
+    Utils::tokenize(layoutConf,tokens,",");
+
+    for(i=0;i<instance->n;i++){
+        antigen->layout[i]= stoi(tokens.at(i));
+    }
+    antigen->p=stoi(tokens.at(instance->n));
+
+    antigen->calculateSolution();
+    antigen->print();
+    delete antigen;
 }
