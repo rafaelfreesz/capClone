@@ -73,6 +73,12 @@ build CMakeFiles/capClone.dir/Antigen.cpp.o: CXX_COMPILER__capClone_Debug /home/
   OBJECT_DIR = CMakeFiles/capClone.dir
   OBJECT_FILE_DIR = CMakeFiles/capClone.dir
 
+build CMakeFiles/capClone.dir/Search.cpp.o: CXX_COMPILER__capClone_Debug /home/rafael/CLionProjects/capClone/Search.cpp || cmake_object_order_depends_target_capClone
+  DEP_FILE = CMakeFiles/capClone.dir/Search.cpp.o.d
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles/capClone.dir
+  OBJECT_FILE_DIR = CMakeFiles/capClone.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target capClone
@@ -81,7 +87,7 @@ build CMakeFiles/capClone.dir/Antigen.cpp.o: CXX_COMPILER__capClone_Debug /home/
 #############################################
 # Link the executable capClone
 
-build capClone: CXX_EXECUTABLE_LINKER__capClone_Debug CMakeFiles/capClone.dir/main.cpp.o CMakeFiles/capClone.dir/Instance.cpp.o CMakeFiles/capClone.dir/Utils.cpp.o CMakeFiles/capClone.dir/Antigen.cpp.o
+build capClone: CXX_EXECUTABLE_LINKER__capClone_Debug CMakeFiles/capClone.dir/main.cpp.o CMakeFiles/capClone.dir/Instance.cpp.o CMakeFiles/capClone.dir/Utils.cpp.o CMakeFiles/capClone.dir/Antigen.cpp.o CMakeFiles/capClone.dir/Search.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/capClone.dir
   POST_BUILD = :
