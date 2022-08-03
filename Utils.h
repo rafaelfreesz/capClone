@@ -12,7 +12,7 @@ class Utils {
 public:
     static void tokenize(string str, vector<string> &token_v, string DELIMITER);
     static vector<Instance*> loadInstances();
-    static void testInstance(vector<Instance*> instances)
+    static void testInstance(vector<Instance*> instances);
 };
 
 

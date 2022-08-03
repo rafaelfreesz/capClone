@@ -42,7 +42,7 @@ vector <Instance*> Utils::loadInstances() {
 
                 if(tokenizedDemands.size()==instance->n){
                     for(int j=0;j<instance->n;j++){
-                        instance->demand[i][j]= stoi(tokenizedDemands.at(j));
+                        instance->demands[i][j]= stoi(tokenizedDemands.at(j));
                     }
                 }else{
                     cout<<"Diferença de tamanho, instancia " + instance->name<<endl;
@@ -53,8 +53,9 @@ vector <Instance*> Utils::loadInstances() {
                 }
             }
         for(int i=0;i<instance->n;i++){
-            instance->length[i]= stoi(tokenizedLengths.at(i));
+            instance->lengths[i]= stoi(tokenizedLengths.at(i));
         }
+        instance->calculateLayoutLength();
         instance->verify();
         fileInst.close();
         instances.push_back(instance);

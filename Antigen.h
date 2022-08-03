@@ -14,6 +14,11 @@ public:
     Antigen(Instance* instance);
     ~Antigen();
 
+    void swap(int i, int j);
+    void shake(int size);
+    void adjustP();
+    Antigen* clone();
+
     void calculateAbcissa();
     void calculatCost();
     void calculateSolution();

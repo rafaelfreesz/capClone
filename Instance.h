@@ -16,15 +16,20 @@ public:
     Instance(int n);
     ~Instance();
 
-    void print();
+    void calculateLayoutLength();
 
+    void print();
     void verify();
 
 
     string name;
     int n;
-    int* length;
-    int** demand;
+    int* lengths;
+    int** demands;
+
+
+
+    int layoutLengh;
 
 };
 
