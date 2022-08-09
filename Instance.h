@@ -26,9 +26,6 @@ public:
     int n;
     int* lengths;
     int** demands;
-
-
-
     int layoutLengh;
 
 };

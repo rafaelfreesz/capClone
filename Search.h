@@ -7,26 +7,38 @@
 
 
 #include "Antigen.h"
+#include "Config.h"
+
 #define FIRST_ANTIGEN 0
 
 class Search {
 public:
-    Search(int pSize, Instance *instance);
+    Search(Config *config, Instance *instance);
     ~Search();
 
+    void evolve();
     void buildInitialPopulation();
+    void operate();
+    void maturate(int iClone, int cloneQty);
+    void reselect();
+    void regenerate();
+
 
     void printPopulation();
+    void printClones();
+
     //Atributos;
-    int pSize;
+    Config* config;
     Antigen** population;
     Instance* instance;
 
 private:
     void deletePopulation();
-    void buildAntigen(Antigen *agReference, int index);
+    void buildAntigen(int index);
     static bool antigenCriterion(Antigen* a, Antigen* b);
     void sortPopulation();
+    void sortClones();
+    void swap(int i, int j);
 
 };
 
