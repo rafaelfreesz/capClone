@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Search.h"
 #include "Config.h"
+#include "Stats.h"
 #include <vector>
 
 using namespace std;
@@ -14,14 +15,15 @@ int main() {
 
     int execs=30;
 
+
     vector<Instance*> instances = Utils::loadInstances();
+
+    Stats* stats=new Stats(execs,instances.size());
     Config* config = new Config(100,500,5,0.15,0.05);
 
     for(int i=0;i<instances.size();i++){
         cout<<"Instância "+instances.at(i)->name<<endl;
 
-        double avgTime=0.0;
-        double bestCost=0.0;
         for(int j=0; j < execs; j++) {
 
             cout<<"\t"<<j<<" - ";
@@ -32,35 +34,24 @@ int main() {
             search->evolve();
             time=clock()-time;
 
-            avgTime+=((double) time / CLOCKS_PER_SEC);
+            stats->setStat(j, i, ((double) time / CLOCKS_PER_SEC), search->population[0]->cost);
 
-            if(j==0 || search->population[0]->cost<bestCost){
-                bestCost=search->population[0]->cost;
-            }
+            cout<<"time: "<<to_string(stats->getTime(j,i))<<"s | cost: "<< to_string(stats->getCost(j,i))<<endl;
 
-            cout<<"time: "<<to_string(((double) time / CLOCKS_PER_SEC))<<"s | cost: "<< to_string(search->population[0]->cost)<<endl;
 
             delete search;
         }
 
-        avgTime/=(double)execs;
-
-        cout<<endl<<"RESUME: BEST TIME: "<<to_string(avgTime)<<"s | BEST COST: "<<bestCost<<endl<<endl;
+        cout<<endl<<"RESUME: BEST TIME: "<<to_string(stats->bestTimes[i])<<"s | BEST COST: "<<to_string(stats->bestCosts[i])<<endl<<endl;
 
 
     }
 
+    stats->printStats(instances);
     delete config;
+    delete stats;
 
     return 0;
 }
-
-/*TODO verificar o balanceamento desta solução
-Abcissa:
-0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000
-Cost: 2829.500000
-Layout:
-E: 2 5
-D: 3 7 6 4 0 1 8 */
 
 
