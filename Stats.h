@@ -7,18 +7,20 @@
 #include <fstream>
 #include <vector>
 #include "Instance.h"
+#include "Config.h"
 
 using namespace std;
 class Stats {
 public:
-    Stats(int execs, int intancesQty);
+    Stats(int execs, int intancesQty, Config *config);
 
     ~Stats();
 
     void setStat(int execI, int instanceI, double time, double cost);
     double getTime(int execI, int instanceI);
     double getCost(int execI, int instanceI);
-    void printStats(vector<Instance*> instances);
+    void printStats(string instanceName, int instanceI);
+    void printHeader(Config* config);
 
     int instancesQty;
     int execs;
@@ -31,6 +33,8 @@ public:
 
     double* avgTimes;
     double* avgCosts;
+
+    ofstream statsFile;
 };
 
 

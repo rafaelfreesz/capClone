@@ -18,8 +18,8 @@ int main() {
 
     vector<Instance*> instances = Utils::loadInstances();
 
-    Stats* stats=new Stats(execs,instances.size());
-    Config* config = new Config(100,500,5,0.15,0.05);
+    Config* config = new Config(1000, 500, 100, 0.15, 0.05, clock());
+    Stats* stats= new Stats(execs, instances.size(), config);
 
     for(int i=0;i<instances.size();i++){
         cout<<"Instância "+instances.at(i)->name<<endl;
@@ -43,11 +43,11 @@ int main() {
         }
 
         cout<<endl<<"RESUME: BEST TIME: "<<to_string(stats->bestTimes[i])<<"s | BEST COST: "<<to_string(stats->bestCosts[i])<<endl<<endl;
-
+        stats->printStats(instances.at(i)->name,i);
 
     }
 
-    stats->printStats(instances);
+
     delete config;
     delete stats;
 

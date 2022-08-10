@@ -4,7 +4,7 @@
 
 #include "Stats.h"
 
-Stats::Stats(int execs, int intancesQty) {
+Stats::Stats(int execs, int intancesQty, Config *config) {
     this->execs=execs;
     this->instancesQty=intancesQty;
 
@@ -25,10 +25,16 @@ Stats::Stats(int execs, int intancesQty) {
         this->avgCosts[i]=0.0;
     }
 
+    printHeader(config);
+
+
+
 }
 
 Stats::~Stats() {
 
+    this->statsFile.close();
+    
     for(int i=0;i<this->instancesQty;i++){
         delete []this->times[i];
         delete []this->costs[i];
@@ -73,18 +79,46 @@ double Stats::getCost(int execI, int instanceI) {
     return this->costs[instanceI][execI];
 }
 
-void Stats::printStats(vector<Instance *> instances) {
+void Stats::printStats(string instanceName, int instanceI) {
 
-    ofstream statsFile("stats");
+    this->statsFile<< instanceName +
+        ";" + to_string(this->avgTimes[instanceI]) +
+        ";" + to_string(this->avgCosts[instanceI]) +
+        ";" + to_string(this->bestTimes[instanceI]) +
+        ";"+to_string(this->bestCosts[instanceI])<<endl;
 
-    string linha="Instancia;avgTime;avgCost;bestTime;bestCost";
 
-    statsFile<<linha<<endl;
+}
 
-    for(int i=0;i<this->instancesQty;i++){
-        linha=instances.at(i)->name+";" + to_string(this->avgTimes[i]) +";"+ to_string(this->avgCosts[i]) +";"+ to_string(this->bestTimes[i]) +";"+ to_string(this->bestCosts[i]);
-        statsFile<<linha<<endl;
+void Stats::printHeader(Config *config) {
+
+    int fileId=0;
+    string fileName="Stats//stats_"+ to_string(fileId);
+
+    this->statsFile.open(fileName,ofstream::in);
+    while(this->statsFile.is_open()){
+        this->statsFile.close();
+        fileId++;
+        fileName="Stats//stats_"+ to_string(fileId);
+        this->statsFile.open(fileName,ofstream::in);
     }
+    this->statsFile.close();
+    this->statsFile.open(fileName);
 
+    this->statsFile<<"pSize: "<<config->pSize<<endl;
+    this->statsFile<<"gen: "<<config->gen<<endl;
+    this->statsFile<<"nClonalSelection: "<<config->nClonalSelection<<endl;
+    this->statsFile<<"betaCoeff: "<<config->betaCoeff<<endl;
+    this->statsFile<<"clonePop: "<<config->clonePop<<endl;
+    this->statsFile<<"arraySize: "<<config->arraySize<<endl;
+    this->statsFile<<"regQty: "<<config->regQty<<endl;
+    this->statsFile<<"seed: "<<config->seed<<endl;
+    this->statsFile<<"clonesPerI: ";
+    for(int i=0;i<config->nClonalSelection;i++){
+        this->statsFile<<config->clonesPerI[i]<<" ";
+    }
+    this->statsFile<<endl<<endl<<"Instancia;avgTime;avgCost;bestTime;bestCost"<<endl;
+    
+   
 }
 

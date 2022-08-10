@@ -12,12 +12,13 @@ class Config {
 
 public:
 
-    Config(int pSize, int gen, int nClonalSelection ,double betaCoeff, double regRate) {
+    Config(int pSize, int gen, int nClonalSelection, double betaCoeff, double regRate, long seed) {
         this->pSize=pSize;
         this->gen=gen;
         this->nClonalSelection=nClonalSelection;
         this->betaCoeff=betaCoeff;
         this->regQty= this->pSize * regRate;
+        this->seed=seed;
 
         countClonalSelection();
         this->arraySize= this->pSize + this->clonePop;
@@ -38,6 +39,23 @@ public:
         }
     }
 
+    void print(){
+        cout<<"pSize: "<<pSize<<endl;
+        cout<<"gen: "<<gen<<endl;
+        cout<<"nClonalSelection: "<<nClonalSelection<<endl;
+        cout<<"betaCoeff: "<<betaCoeff<<endl;
+        cout<<"clonePop: "<<clonePop<<endl;
+        cout<<"arraySize: "<<arraySize<<endl;
+        cout<<"regQty: "<<regQty<<endl;
+        cout<<"seed: "<<seed<<endl;
+        cout<<"clonesPerI: ";
+        for(int i=0;i<nClonalSelection;i++){
+            cout<<this->clonesPerI[i]<<" ";
+        }
+        cout<<endl;
+
+    }
+
     int pSize;
     int gen;
     int nClonalSelection;
@@ -45,6 +63,7 @@ public:
     int clonePop;
     int arraySize;
     int regQty;
+    long seed;
     int* clonesPerI;
 
 
