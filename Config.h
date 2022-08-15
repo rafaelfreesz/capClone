@@ -12,13 +12,20 @@ class Config {
 
 public:
 
-    Config(int pSize, int gen, int nClonalSelection, double betaCoeff, double regRate, long seed) {
+    Config(int pSize, int gen, int nClonalSelection, double betaCoeff, double regRate, int execs) {
         this->pSize=pSize;
         this->gen=gen;
         this->nClonalSelection=nClonalSelection;
         this->betaCoeff=betaCoeff;
         this->regQty= this->pSize * regRate;
-        this->seed=seed;
+        this->execs=execs;
+
+        srand(clock());
+        this->seeds=new long [execs];
+        for(int i=0;i<execs;i++){
+            this->seeds[i]=rand();
+        }
+
 
         countClonalSelection();
         this->arraySize= this->pSize + this->clonePop;
@@ -27,13 +34,21 @@ public:
 
     ~Config() {
         delete[] this->clonesPerI;
+        delete[] this->seeds;
     }
 
     void countClonalSelection(){
+
+
+
         this->clonesPerI=new int [this->nClonalSelection];
         this->clonePop=0;
+
+        int betaN=this->betaCoeff*this->pSize;
+
         for(int i=0;i<this->nClonalSelection; i++){
-            int clones= this->nClonalSelection / (i+1);
+
+            int clones= max(1,betaN / (i+1));
             this->clonesPerI[i]=clones;
             this->clonePop+=clones;
         }
@@ -47,7 +62,10 @@ public:
         cout<<"clonePop: "<<clonePop<<endl;
         cout<<"arraySize: "<<arraySize<<endl;
         cout<<"regQty: "<<regQty<<endl;
-        cout<<"seed: "<<seed<<endl;
+        cout<<"seeds: "<<endl<<"\t";
+        for(int i=0;i<execs;i++){
+            cout<<this->seeds[i]<<" ";
+        }
         cout<<"clonesPerI: ";
         for(int i=0;i<nClonalSelection;i++){
             cout<<this->clonesPerI[i]<<" ";
@@ -63,7 +81,8 @@ public:
     int clonePop;
     int arraySize;
     int regQty;
-    long seed;
+    int execs;
+    long* seeds;
     int* clonesPerI;
 
 

@@ -10,22 +10,20 @@ using namespace std;
 
 
 int main() {
-    long semente=clock();
-    srand(semente);
 
     int execs=30;
 
 
     vector<Instance*> instances = Utils::loadInstances();
 
-    Config* config = new Config(1000, 500, 100, 0.15, 0.05, clock());
+    Config* config = new Config(100, 500, 10, 0.15, 0.05,execs);
     Stats* stats= new Stats(execs, instances.size(), config);
 
     for(int i=0;i<instances.size();i++){
         cout<<"Instância "+instances.at(i)->name<<endl;
 
         for(int j=0; j < execs; j++) {
-
+            srand(config->seeds[j]);
             cout<<"\t"<<j<<" - ";
 
             Search* search = new Search(config,instances.at(i));
@@ -42,8 +40,8 @@ int main() {
             delete search;
         }
 
-        cout<<endl<<"RESUME: BEST TIME: "<<to_string(stats->bestTimes[i])<<"s | BEST COST: "<<to_string(stats->bestCosts[i])<<endl<<endl;
         stats->printStats(instances.at(i)->name,i);
+        cout<<endl<<"RESUME: BEST TIME: "<<to_string(stats->bestTimes[i])<<"s | BEST COST: "<<to_string(stats->bestCosts[i])<<" | LitSol: "<<to_string(stats->litSol[i])<<" | GAP: "<<to_string(stats->gapsSol[i])<<endl<<endl;
 
     }
 

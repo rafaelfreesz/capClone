@@ -53,10 +53,11 @@ void Search::maturate(int iClone, int cloneQty) {
 
     double randProb=(double)(rand()%100)/100.0;
 
-    while(randProb<probSwap && swaps++<swapsLimit){
+    do{
         this->population[iClone]->swap(rand()%this->instance->n,rand()%this->instance->n);
         randProb=(double)(rand()%100)/100.0;
-    }
+        swaps++;
+    }while(randProb<probSwap && swaps<swapsLimit);
 
     this->population[iClone]->calculateSolution();
 

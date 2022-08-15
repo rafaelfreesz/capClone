@@ -21,9 +21,12 @@ public:
     double getCost(int execI, int instanceI);
     void printStats(string instanceName, int instanceI);
     void printHeader(Config* config);
+    void getLitSolutions();
 
     int instancesQty;
     int execs;
+    double* litSol;
+    double* gapsSol;
 
     double** times;
     double** costs;

@@ -15,6 +15,8 @@ Stats::Stats(int execs, int intancesQty, Config *config) {
     this->times=new double * [intancesQty];
     this->costs=new double * [intancesQty];
     this->costs=new double * [intancesQty];
+    this->litSol=new double [intancesQty];
+    this->gapsSol=new double [intancesQty];
 
     for(int i=0;i<intancesQty;i++){
         this->times[i]=new double [execs];
@@ -25,6 +27,7 @@ Stats::Stats(int execs, int intancesQty, Config *config) {
         this->avgCosts[i]=0.0;
     }
 
+    getLitSolutions();
     printHeader(config);
 
 
@@ -46,6 +49,8 @@ Stats::~Stats() {
     delete []this->bestCosts;
     delete []this->avgTimes;
     delete []this->avgCosts;
+    delete []this->litSol;
+    delete []this->gapsSol;
 
 }
 
@@ -81,6 +86,8 @@ double Stats::getCost(int execI, int instanceI) {
 
 void Stats::printStats(string instanceName, int instanceI) {
 
+    this->gapsSol[instanceI]=(this->bestCosts[instanceI]-this->litSol[instanceI])/this->litSol[instanceI];
+
     this->statsFile<< instanceName +
         ";" + to_string(this->avgTimes[instanceI]) +
         ";" + to_string(this->avgCosts[instanceI]) +
@@ -112,13 +119,30 @@ void Stats::printHeader(Config *config) {
     this->statsFile<<"clonePop: "<<config->clonePop<<endl;
     this->statsFile<<"arraySize: "<<config->arraySize<<endl;
     this->statsFile<<"regQty: "<<config->regQty<<endl;
-    this->statsFile<<"seed: "<<config->seed<<endl;
-    this->statsFile<<"clonesPerI: ";
+    this->statsFile<<"seed: \n\t";
+    for(int i=0;i<config->nClonalSelection;i++){
+        this->statsFile<<config->seeds[i]<<" ";
+    }
+
+    this->statsFile<<endl<<"clonesPerI: \n\t";
     for(int i=0;i<config->nClonalSelection;i++){
         this->statsFile<<config->clonesPerI[i]<<" ";
     }
     this->statsFile<<endl<<endl<<"Instancia;avgTime;avgCost;bestTime;bestCost"<<endl;
     
    
+}
+
+void Stats::getLitSolutions() {
+    ifstream litSolFile;
+    litSolFile.open("Stats/litSol");
+
+    string line;
+
+    for(int i=0;i<this->instancesQty;i++){
+        getline(litSolFile,line);
+        this->litSol[i]=stod(line);
+    }
+    litSolFile.close();
 }
 
