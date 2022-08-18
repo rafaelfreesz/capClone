@@ -92,7 +92,8 @@ void Stats::printStats(string instanceName, int instanceI) {
         ";" + to_string(this->avgTimes[instanceI]) +
         ";" + to_string(this->avgCosts[instanceI]) +
         ";" + to_string(this->bestTimes[instanceI]) +
-        ";"+to_string(this->bestCosts[instanceI])<<endl;
+        ";"+to_string(this->bestCosts[instanceI]) +
+        ";"+to_string(this->gapsSol[instanceI])<<endl;
 
 
 }
@@ -120,7 +121,7 @@ void Stats::printHeader(Config *config) {
     this->statsFile<<"arraySize: "<<config->arraySize<<endl;
     this->statsFile<<"regQty: "<<config->regQty<<endl;
     this->statsFile<<"seed: \n\t";
-    for(int i=0;i<config->nClonalSelection;i++){
+    for(int i=0;i<config->execs;i++){
         this->statsFile<<config->seeds[i]<<" ";
     }
 

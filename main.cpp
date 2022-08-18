@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
 
-    int execs=30;
+    int execs=3;
 
 
     vector<Instance*> instances = Utils::loadInstances();
@@ -26,7 +26,7 @@ int main() {
             srand(config->seeds[j]);
             cout<<"\t"<<j<<" - ";
 
-            Search* search = new Search(config,instances.at(i));
+            Search* search = new Search(config, instances.at(i), stats->litSol[i]);
 
             clock_t time=clock();
             search->evolve();

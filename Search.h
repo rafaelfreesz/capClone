@@ -13,7 +13,7 @@
 
 class Search {
 public:
-    Search(Config *config, Instance *instance);
+    Search(Config *config, Instance *instance, double litSol);
     ~Search();
 
     void evolve();
@@ -31,6 +31,7 @@ public:
     Config* config;
     Antigen** population;
     Instance* instance;
+    double litSol;
 
 private:
     void deletePopulation();

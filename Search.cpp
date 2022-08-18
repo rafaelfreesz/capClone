@@ -5,10 +5,11 @@
 #include <algorithm>
 #include "Search.h"
 
-Search::Search(Config *config, Instance *instance) {
+Search::Search(Config *config, Instance *instance, double litSol) {
     this->config=config;
     this->population= new Antigen* [this->config->arraySize];
     this->instance=instance;
+    this->litSol=litSol;
 
 }
 
@@ -27,6 +28,21 @@ void Search::evolve() {
         regenerate();
     }
 
+    /*clock_t t;
+    double tempo=0.0;
+    do{
+        t=clock();
+        operate();
+        reselect();
+        regenerate();
+        t=clock()-t;
+        tempo+=((double) t / CLOCKS_PER_SEC);
+    }while(tempo<1.0);*/
+    /*while(this->population[0]->cost>this->litSol){
+        operate();
+        reselect();
+        regenerate();
+    }*/
 }
 //Processo de clonagem
 void Search::operate() {
@@ -153,10 +169,10 @@ void Search::printPopulation() {
     for(int i=0;i<this->config->pSize;i++){
         cout<<"-- "<<i<<" ";
         this->population[i]->print();
-        /*if(i>0 && this->population[i]->cost<this->population[i-1]->cost){
+        if(i>0 && this->population[i]->cost<this->population[i-1]->cost){
             cout<<"Erro de ordenação"<<endl;
             exit(1);
-        }*/
+        }
     }
 
 }
@@ -167,10 +183,10 @@ void Search::printClones() {
     cout<<"----CLONES---- "<<endl<<this->instance->name<<endl;
     for(int i=this->config->pSize;i<this->config->arraySize; i++){
         this->population[i]->print();
-        /*if(i>this->config->pSize && this->population[i]->cost<this->population[i-1]->cost){
+        if(i>this->config->pSize && this->population[i]->cost<this->population[i-1]->cost){
             cout<<"Erro de ordenação"<<endl;
             exit(1);
-        }*/
+        }
     }
 
 }
