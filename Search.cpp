@@ -73,6 +73,8 @@ void Search::maturate(int iClone, int cloneQty) {
         swaps++;
     }while(randProb<probSwap);
 
+
+    this->population[iClone]->adjustP();
     this->population[iClone]->calculateSolution();
 
 }
@@ -100,6 +102,7 @@ void Search::regenerate() {
     int iReg=this->config->pSize-1;
     for(int i=0;i<this->config->regQty;i++){
         this->population[iReg]->shake(this->instance->n);
+        this->population[iReg--]->adjustP();
         this->population[iReg--]->calculateSolution();
     }
     sortPopulation();

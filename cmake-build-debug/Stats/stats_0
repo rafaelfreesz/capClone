@@ -1,0 +1,13 @@
+pSize: 100
+gen: 1000
+nClonalSelection: 50
+betaCoeff: 0.3
+clonePop: 131
+arraySize: 231
+regQty: 50
+seed: 
+	1927576460 
+clonesPerI: 
+	30 15 10 7 6 5 4 3 3 3 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+
+Instancia;avgTime;avgCost;bestTime;bestCost;GAP
