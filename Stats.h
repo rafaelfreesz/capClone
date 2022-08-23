@@ -12,7 +12,7 @@
 using namespace std;
 class Stats {
 public:
-    Stats(int execs, int intancesQty, Config *config);
+    Stats(int intancesQty, Config *config);
 
     ~Stats();
 

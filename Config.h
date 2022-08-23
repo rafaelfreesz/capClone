@@ -12,13 +12,14 @@ class Config {
 
 public:
 
-    Config(int pSize, int gen, int nClonalSelection, double betaCoeff, double regRate, int execs) {
+    Config(int pSize, int gen, double nClonalRate, double betaCoeff, double regRate, int execs) {
         this->pSize=pSize;
         this->gen=gen;
-        this->nClonalSelection=nClonalSelection;
+        this->nClonalSelection=(int)(nClonalRate*pSize);
         this->betaCoeff=betaCoeff;
         this->regQty= this->pSize * regRate;
         this->execs=execs;
+        this->clonesPerI= nullptr;
 
         srand(clock());
         this->seeds=new long [execs];
@@ -39,7 +40,9 @@ public:
 
     void countClonalSelection(){
 
-
+        if(this->clonesPerI!= nullptr){
+            delete [] this->clonesPerI;
+        }
 
         this->clonesPerI=new int [this->nClonalSelection];
         this->clonePop=0;
@@ -53,7 +56,6 @@ public:
             this->clonePop+=clones;
         }
     }
-
     void print(){
         cout<<"pSize: "<<pSize<<endl;
         cout<<"gen: "<<gen<<endl;

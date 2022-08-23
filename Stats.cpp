@@ -4,8 +4,8 @@
 
 #include "Stats.h"
 
-Stats::Stats(int execs, int intancesQty, Config *config) {
-    this->execs=execs;
+Stats::Stats(int intancesQty, Config *config) {
+    this->execs=config->execs;
     this->instancesQty=intancesQty;
 
     this->bestTimes=new double [intancesQty];

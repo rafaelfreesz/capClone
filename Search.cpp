@@ -65,15 +65,13 @@ void Search::maturate(int iClone, int cloneQty) {
     double probSwap = (1.0-(double)cloneQty/this->config->clonePop);
     //TODO observar (MUITAS QUANTIDADES DE CLONE TORNA DIFICIL SAIR DO LAÇO) Solução: Limitar a quantidade de swaps
     int swaps=0;
-    int swapsLimit=this->population[iClone]->instance->n/2;
 
     double randProb=(double)(rand()%100)/100.0;
-
     do{
         this->population[iClone]->swap(rand()%this->instance->n,rand()%this->instance->n);
         randProb=(double)(rand()%100)/100.0;
         swaps++;
-    }while(randProb<probSwap && swaps<swapsLimit);
+    }while(randProb<probSwap);
 
     this->population[iClone]->calculateSolution();
 
