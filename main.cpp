@@ -8,9 +8,9 @@
 
 using namespace std;
 
-
+void testSolution();
 int main() {
-
+    //testSolution();
     vector<Instance*> instances = Utils::loadInstances();
     //500, 5000, 0.2, 0.50, 0.1,30
     Config* config = new Config(100, 500, 0.1, 0.2, 0.4,30);
@@ -51,3 +51,25 @@ int main() {
 }
 
 
+void testSolution(){
+
+    vector<Instance*> instances=Utils::loadInstances();
+
+    string instanceName="S9";
+    Instance* instance;
+    for(Instance* i: instances){
+        if(i->name==instanceName){
+            instance=i;
+            break;
+        }
+    }
+
+    Antibody* layout=new Antibody(instance);
+    int corridor[9]={2,1,4,0,8,7,5,3,6};
+    layout->layout=corridor;
+    layout->p=5;
+    layout->calculateSolution();
+    layout->print();
+
+    exit(0);
+}

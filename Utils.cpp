@@ -102,3 +102,10 @@ void Utils::testInstance(vector<Instance *> instances) {
     antibody->print();
     delete antibody;
 }
+
+void Utils::swapInt(int i, int j, int *array) {
+    int aux=array[i];
+
+    array[i]=array[j];
+    array[j]=aux;
+}

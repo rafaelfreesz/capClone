@@ -21,7 +21,8 @@ public:
         this->executions=execs;
         this->clonesPerI= nullptr;
 
-        srand(clock());
+        srand(0);
+        //srand(clock());
         this->seeds=new long [execs];
         for(int i=0;i<execs;i++){
             this->seeds[i]=rand();

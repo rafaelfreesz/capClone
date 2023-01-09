@@ -8,6 +8,7 @@
 
 #include "Antibody.h"
 #include "Config.h"
+#include "Utils.h"
 
 #define FIRST_ANTIBODY 0
 
@@ -22,6 +23,15 @@ public:
     void maturate(int iClone, int cloneQty, int iMemSet);
     void reselect();
     void regenerate();
+
+    //Local Searches
+    void localSearch(Antibody *antibody);
+    void rvnd(Antibody* antibody);
+    bool neighborsSwap(Antibody *antibody);
+    bool nonNeiborhsSwap(Antibody *antibody);
+    bool opositeSideSwap(Antibody *antibody);
+
+    void PathR(Antibody *antibody);
 
 
     void printPopulation();
@@ -39,7 +49,7 @@ private:
     static bool antibodyCriterion(Antibody* a, Antibody* b);
     void sortPopulation();
     void sortClones();
-    void swap(int i, int j);
+    void swapAntibody(int i, int j);
 
 };
 

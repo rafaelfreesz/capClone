@@ -86,14 +86,14 @@ double Stats::getCost(int execI, int instanceI) {
 
 void Stats::printStats(string instanceName, int instanceI) {
 
-    this->gapsSol[instanceI]=(this->bestCosts[instanceI]-this->litSol[instanceI])/this->litSol[instanceI];
+    this->gapsSol[instanceI]=(this->bestCosts[instanceI]-this->litSol[instanceI])*100/this->litSol[instanceI];
 
     this->statsFile<< instanceName +
         ";" + to_string(this->avgTimes[instanceI]) +
         ";" + to_string(this->avgCosts[instanceI]) +
         ";" + to_string(this->bestTimes[instanceI]) +
         ";"+to_string(this->bestCosts[instanceI]) +
-        ";"+to_string(this->gapsSol[instanceI]*100)<<endl;
+        ";"+to_string(this->gapsSol[instanceI])<<endl;
 
 
 }

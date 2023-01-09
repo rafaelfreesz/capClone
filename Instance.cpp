@@ -7,7 +7,7 @@
 
 Instance::Instance(int n){
     this->n=n;
-    this->lengths = new int[n];
+    this->lengths = new double [n];
     this->halfLengths = new double [n];
     this->demands = new int*[n];
     for(int i=0;i<n;i++){

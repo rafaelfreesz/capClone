@@ -14,7 +14,7 @@ public:
     Antibody(Instance* instance);
     ~Antibody();
 
-    void swap(int i, int j);
+    void swapFacility(int i, int j);
     void shake(int size);
     void adjustP();
     Antibody* clone();
@@ -25,15 +25,20 @@ public:
 
     //Swap calculating
     void calculateSwap(int i, int j);
-    void sameSideCalc(int iMin, int iMax);
-    void oppositeSideCalc(int iMin, int iMax);
+
+    void neigbohrCalculation(int iMin, int iMax);
+    void nonNeigbohrCalculation(int iMin, int iMax);
+    void opositeSideCalculation(int iMin, int iMax);
+
+    void testCalculation();
 
     void print();
 
     int* layout;
-    float* abcissa;
+    double* abcissa;
     int p;
-    float cost;
+    double cost;
+    bool improved;
     Instance* instance;
 };
 
