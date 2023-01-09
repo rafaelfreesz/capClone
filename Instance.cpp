@@ -8,6 +8,7 @@
 Instance::Instance(int n){
     this->n=n;
     this->lengths = new int[n];
+    this->halfLengths = new double [n];
     this->demands = new int*[n];
     for(int i=0;i<n;i++){
         this->demands[i]=new int[n];
@@ -17,6 +18,7 @@ Instance::Instance(int n){
 
 Instance::~Instance() {
     delete[] this->lengths;
+    delete[] this->halfLengths;
     for(int i=0;i<this->n;i++){
         delete []this->demands[i];
     }

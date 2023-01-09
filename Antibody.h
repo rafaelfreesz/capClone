@@ -2,26 +2,31 @@
 // Created by rafael on 26/07/22.
 //
 
-#ifndef CAPCLONE_ANTIGEN_H
-#define CAPCLONE_ANTIGEN_H
+#ifndef CAPCLONE_ANTIBODY_H
+#define CAPCLONE_ANTIBODY_H
 
 
 #include "Instance.h"
 
-class Antigen {
+class Antibody {
 public:
 
-    Antigen(Instance* instance);
-    ~Antigen();
+    Antibody(Instance* instance);
+    ~Antibody();
 
     void swap(int i, int j);
     void shake(int size);
     void adjustP();
-    Antigen* clone();
+    Antibody* clone();
 
     void calculateAbcissa();
     void calculatCost();
     void calculateSolution();
+
+    //Swap calculating
+    void calculateSwap(int i, int j);
+    void sameSideCalc(int iMin, int iMax);
+    void oppositeSideCalc(int iMin, int iMax);
 
     void print();
 
@@ -33,4 +38,4 @@ public:
 };
 
 
-#endif //CAPCLONE_ANTIGEN_H
+#endif //CAPCLONE_ANTIBODY_H

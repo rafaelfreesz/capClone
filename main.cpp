@@ -12,14 +12,15 @@ using namespace std;
 int main() {
 
     vector<Instance*> instances = Utils::loadInstances();
-
-    Config* config = new Config(100, 500, 0.5, 0.30, 0.3,30);
+    //500, 5000, 0.2, 0.50, 0.1,30
+    Config* config = new Config(100, 500, 0.1, 0.2, 0.4,30);
     Stats* stats= new Stats(instances.size(), config);
+
 
     for(int i=0;i<instances.size();i++){
         cout<<"Instância "+instances.at(i)->name<<endl;
 
-        for(int j=0; j < config->execs; j++) {
+        for(int j=0; j < config->executions; j++) {
             srand(config->seeds[j]);
             cout<<"\t"<<j<<" - ";
 

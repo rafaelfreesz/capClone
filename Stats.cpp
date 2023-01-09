@@ -5,7 +5,7 @@
 #include "Stats.h"
 
 Stats::Stats(int intancesQty, Config *config) {
-    this->execs=config->execs;
+    this->execs=config->executions;
     this->instancesQty=intancesQty;
 
     this->bestTimes=new double [intancesQty];
@@ -93,7 +93,7 @@ void Stats::printStats(string instanceName, int instanceI) {
         ";" + to_string(this->avgCosts[instanceI]) +
         ";" + to_string(this->bestTimes[instanceI]) +
         ";"+to_string(this->bestCosts[instanceI]) +
-        ";"+to_string(this->gapsSol[instanceI])<<endl;
+        ";"+to_string(this->gapsSol[instanceI]*100)<<endl;
 
 
 }
@@ -115,18 +115,18 @@ void Stats::printHeader(Config *config) {
 
     this->statsFile<<"pSize: "<<config->pSize<<endl;
     this->statsFile<<"gen: "<<config->gen<<endl;
-    this->statsFile<<"nClonalSelection: "<<config->nClonalSelection<<endl;
+    this->statsFile << "nClonalSelection: " << config->memorySetSize << endl;
     this->statsFile<<"betaCoeff: "<<config->betaCoeff<<endl;
     this->statsFile<<"clonePop: "<<config->clonePop<<endl;
     this->statsFile<<"arraySize: "<<config->arraySize<<endl;
-    this->statsFile<<"regQty: "<<config->regQty<<endl;
+    this->statsFile << "regQty: " << config->regenerationQty << endl;
     this->statsFile<<"seed: \n\t";
-    for(int i=0;i<config->execs;i++){
+    for(int i=0;i<config->executions; i++){
         this->statsFile<<config->seeds[i]<<" ";
     }
 
     this->statsFile<<endl<<"clonesPerI: \n\t";
-    for(int i=0;i<config->nClonalSelection;i++){
+    for(int i=0;i<config->memorySetSize; i++){
         this->statsFile<<config->clonesPerI[i]<<" ";
     }
     this->statsFile<<endl<<endl<<"Instancia;avgTime;avgCost;bestTime;bestCost"<<endl;

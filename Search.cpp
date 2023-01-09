@@ -7,7 +7,7 @@
 
 Search::Search(Config *config, Instance *instance, double litSol) {
     this->config=config;
-    this->population= new Antigen* [this->config->arraySize];
+    this->population= new Antibody* [this->config->arraySize];
     this->instance=instance;
     this->litSol=litSol;
 
@@ -15,7 +15,17 @@ Search::Search(Config *config, Instance *instance, double litSol) {
 
 Search::~Search() {
 
-    deletePopulation();
+    if(this->population!= nullptr){
+        for(int i=0;i< this->config->pSize;i++){
+            if(this->population[i]!= nullptr) {
+                delete this->population[i];
+            }else{
+                break;
+            }
+        }
+        delete[] this->population;
+
+    }
 
 }
 
@@ -27,52 +37,28 @@ void Search::evolve() {
         reselect();
         regenerate();
     }
-
-    /*clock_t t;
-    double tempo=0.0;
-    do{
-        t=clock();
-        operate();
-        reselect();
-        regenerate();
-        t=clock()-t;
-        tempo+=((double) t / CLOCKS_PER_SEC);
-    }while(tempo<1.0);*/
-    /*while(this->population[0]->cost>this->litSol){
-        operate();
-        reselect();
-        regenerate();
-    }*/
 }
 //Processo de clonagem
 void Search::operate() {
 
     int iClone=this->config->pSize;
 
-    for(int i=0;i<this->config->nClonalSelection;i++){
+    for(int i=0;i<this->config->memorySetSize; i++){
 
         for(int j=0;j<this->config->clonesPerI[i];j++){
-            this->population[iClone]=this->population[i]->clone(); //Clonagem do antigeno
-            maturate(iClone++,this->config->clonesPerI[i]); //Maturação (mutação) do indivíduo
+            this->population[iClone]=this->population[i]->clone(); //Clonagem do anticorpo
+            maturate(iClone++, this->config->clonesPerI[i], i+1); //Maturação (mutação) do indivíduo
         }
     }
     sortClones();
 }
 
 //Processo de maturação (mutação)
-void Search::maturate(int iClone, int cloneQty) {
+void Search::maturate(int iClone, int cloneQty, int iMemSet) {
 
-    double probSwap = (1.0-(double)cloneQty/this->config->clonePop);
-    //TODO observar (MUITAS QUANTIDADES DE CLONE TORNA DIFICIL SAIR DO LAÇO) Solução: Limitar a quantidade de swaps
-    int swaps=0;
-
-    double randProb=(double)(rand()%100)/100.0;
-    do{
+    for(int i=0;i<iMemSet;i++){
         this->population[iClone]->swap(rand()%this->instance->n,rand()%this->instance->n);
-        randProb=(double)(rand()%100)/100.0;
-        swaps++;
-    }while(randProb<probSwap);
-
+    }
 
     this->population[iClone]->adjustP();
     this->population[iClone]->calculateSolution();
@@ -100,7 +86,7 @@ void Search::reselect() {
 void Search::regenerate() {
 
     int iReg=this->config->pSize-1;
-    for(int i=0;i<this->config->regQty;i++){
+    for(int i=0;i<this->config->regenerationQty; i++){
         this->population[iReg]->shake(this->instance->n);
         this->population[iReg--]->adjustP();
         this->population[iReg--]->calculateSolution();
@@ -108,16 +94,15 @@ void Search::regenerate() {
     sortPopulation();
 }
 
-//Constroi população inicial de antigenos
+//Constroi população inicial de anticorpos
 void Search::buildInitialPopulation() {
 
     if(this->config->pSize>0){
 
-        this->population = new Antigen*[this->config->arraySize];
+        this->population = new Antibody*[this->config->arraySize];
 
-        buildAntigen(0);
-        for(int i=1;i<this->config->pSize;i++){
-            buildAntigen(i);
+        for(int i=0;i<this->config->pSize;i++){
+            buildAntibody(i);
         }
 
         sortPopulation();
@@ -128,15 +113,15 @@ void Search::buildInitialPopulation() {
     }
 }
 
-//Constroi um antigeno aleatoriamente com base no outro
-void Search::buildAntigen(int index) {
+//Constroi um anticorpo aleatoriamente com base no outro
+void Search::buildAntibody(int index) {
 
-    if(index!=FIRST_ANTIGEN){
+    if(index != FIRST_ANTIBODY){
         this->population[index]=this->population[index-1]->clone();
 
     }else{
-        //Instanciação do primeiro antigeno
-        this->population[index] = new Antigen(this->instance);
+        //Instanciação do primeiro anticorpo
+        this->population[index] = new Antibody(this->instance);
 
         for(int i=0;i<this->instance->n;i++){
             this->population[index]->layout[i]=i;
@@ -146,21 +131,6 @@ void Search::buildAntigen(int index) {
     this->population[index]->shake(this->instance->n);
     this->population[index]->adjustP();
     this->population[index]->calculateSolution();
-}
-
-//Deleta a população inteira
-void Search::deletePopulation() {
-    if(this->population!= nullptr){
-        for(int i=0;i< this->config->pSize;i++){
-            if(this->population[i]!= nullptr) {
-                delete this->population[i];
-            }else{
-                break;
-            }
-        }
-        delete[] this->population;
-
-    }
 }
 
 //Impressao da população
@@ -178,6 +148,22 @@ void Search::printPopulation() {
 
 }
 
+void Search::printAll(){
+    cout<<"--------Population:"<<endl;
+    for(int i=0;i<this->config->pSize;i++){
+        if(i>0 && this->population[i]->cost<this->population[i-1]->cost){
+            cout<<"Erro de ordenação aqui-> ";
+        }
+        cout<<this->population[i]->cost<<endl;
+    }
+    cout<<"--------Clones:"<<endl;
+    for(int i=this->config->pSize;i<this->config->arraySize;i++){
+        if(i>this->config->pSize && this->population[i]->cost<this->population[i-1]->cost){
+            cout<<"Erro de ordenação aqui-> ";
+        }
+        cout<<this->population[i]->cost<<endl;
+    }
+}
 //Impressao dos Clones
 void Search::printClones() {
 
@@ -192,27 +178,27 @@ void Search::printClones() {
 
 }
 
-//Critério de comparação de antigentos (decrescente)
-bool Search::antigenCriterion(Antigen *a, Antigen *b) {
+//Critério de comparação de anticorpos (decrescente)
+bool Search::antibodyCriterion(Antibody *a, Antibody *b) {
     return a->cost<b->cost;
 }
 
 //Ordenação da população
 void Search::sortPopulation() {
-    stable_sort(this->population,this->population+config->pSize, antigenCriterion);
+    stable_sort(this->population, this->population + config->pSize, antibodyCriterion);
 }
 
 //Ordenação dos clones
 void Search::sortClones() {
-    stable_sort(this->population+config->pSize,this->population+config->arraySize, antigenCriterion);
+    stable_sort(this->population + config->pSize, this->population + config->arraySize, antibodyCriterion);
 }
 
-//Faz o swap de antigenos no vetor de população
+//Faz o swap de anticorpos no vetor de população
 void Search::swap(int i, int j) {
-    Antigen* antigen=this->population[i];
+    Antibody* antibody=this->population[i];
 
     this->population[i]=this->population[j];
-    this->population[j]=antigen;
+    this->population[j]=antibody;
 }
 
 

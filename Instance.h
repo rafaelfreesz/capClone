@@ -25,6 +25,7 @@ public:
     string name;
     int n;
     int* lengths;
+    double* halfLengths;
     int** demands;
     int layoutLengh;
 

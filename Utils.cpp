@@ -4,7 +4,7 @@
 
 #include <fstream>
 #include "Utils.h"
-#include "Antigen.h"
+#include "Antibody.h"
 
 vector <Instance*> Utils::loadInstances() {
     vector<Instance*> instances;
@@ -52,9 +52,12 @@ vector <Instance*> Utils::loadInstances() {
                     cout<<"Linhas não batem"<<endl;
                 }
             }
+
         for(int i=0;i<instance->n;i++){
             instance->lengths[i]= stoi(tokenizedLengths.at(i));
+            instance->halfLengths[i]=(double)instance->lengths[i]/2.0;
         }
+
         instance->calculateLayoutLength();
         instance->verify();
         fileInst.close();
@@ -83,7 +86,7 @@ void Utils::testInstance(vector<Instance *> instances) {
     Instance* instance=instances.at(i);
     instance->print();
 
-    Antigen* antigen = new Antigen(instance);
+    Antibody* antibody = new Antibody(instance);
 
     string layoutConf="5,1,3,4,6,8,2,0,9,7,6";
 
@@ -91,11 +94,11 @@ void Utils::testInstance(vector<Instance *> instances) {
     Utils::tokenize(layoutConf,tokens,",");
 
     for(i=0;i<instance->n;i++){
-        antigen->layout[i]= stoi(tokens.at(i));
+        antibody->layout[i]= stoi(tokens.at(i));
     }
-    antigen->p=stoi(tokens.at(instance->n));
+    antibody->p=stoi(tokens.at(instance->n));
 
-    antigen->calculateSolution();
-    antigen->print();
-    delete antigen;
+    antibody->calculateSolution();
+    antibody->print();
+    delete antibody;
 }

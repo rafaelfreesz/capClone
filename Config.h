@@ -12,13 +12,13 @@ class Config {
 
 public:
 
-    Config(int pSize, int gen, double nClonalRate, double betaCoeff, double regRate, int execs) {
+    Config(int pSize, int gen, double memorySetRate, double betaCoeff, double regenerationRate, int execs) {
         this->pSize=pSize;
         this->gen=gen;
-        this->nClonalSelection=(int)(nClonalRate*pSize);
+        this->memorySetSize=(int)(memorySetRate * pSize);
         this->betaCoeff=betaCoeff;
-        this->regQty= this->pSize * regRate;
-        this->execs=execs;
+        this->regenerationQty= this->pSize * regenerationRate;
+        this->executions=execs;
         this->clonesPerI= nullptr;
 
         srand(clock());
@@ -40,16 +40,12 @@ public:
 
     void countClonalSelection(){
 
-        if(this->clonesPerI!= nullptr){
-            delete [] this->clonesPerI;
-        }
-
-        this->clonesPerI=new int [this->nClonalSelection];
+        this->clonesPerI=new int [this->memorySetSize];
         this->clonePop=0;
 
         int betaN=this->betaCoeff*this->pSize;
 
-        for(int i=0;i<this->nClonalSelection; i++){
+        for(int i=0;i<this->memorySetSize; i++){
 
             int clones= max(1,betaN / (i+1));
             this->clonesPerI[i]=clones;
@@ -59,17 +55,17 @@ public:
     void print(){
         cout<<"pSize: "<<pSize<<endl;
         cout<<"gen: "<<gen<<endl;
-        cout<<"nClonalSelection: "<<nClonalSelection<<endl;
+        cout << "nClonalSelection: " << memorySetSize << endl;
         cout<<"betaCoeff: "<<betaCoeff<<endl;
         cout<<"clonePop: "<<clonePop<<endl;
         cout<<"arraySize: "<<arraySize<<endl;
-        cout<<"regQty: "<<regQty<<endl;
+        cout << "regQty: " << regenerationQty << endl;
         cout<<"seeds: "<<endl<<"\t";
-        for(int i=0;i<execs;i++){
+        for(int i=0; i < executions; i++){
             cout<<this->seeds[i]<<" ";
         }
         cout<<"clonesPerI: ";
-        for(int i=0;i<nClonalSelection;i++){
+        for(int i=0; i < memorySetSize; i++){
             cout<<this->clonesPerI[i]<<" ";
         }
         cout<<endl;
@@ -78,12 +74,12 @@ public:
 
     int pSize;
     int gen;
-    int nClonalSelection;
+    int memorySetSize;
     double betaCoeff;
     int clonePop;
     int arraySize;
-    int regQty;
-    int execs;
+    int regenerationQty;
+    int executions;
     long* seeds;
     int* clonesPerI;
 
