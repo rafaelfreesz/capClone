@@ -1,0 +1,13 @@
+pSize: 10
+gen: 500
+memorySetSizen: 4
+betaCoeff: 1.8
+clonePop: 18
+arraySize: 28
+regQty: 1
+seed: 
+	88550527 
+clonesPerI: 
+	10 5 2 1 
+
+Instancia;avgTime;avgCost;bestTime;bestCost

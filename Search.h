@@ -20,9 +20,10 @@ public:
     void evolve();
     void buildInitialPopulation();
     void operate();
-    void maturate(int iClone, int cloneQty, int iMemSet);
+    void maturate(int iArray, int cloneQty);
     void reselect();
     void regenerate();
+    void improveMemory();
 
     //Local Searches
     void localSearch(Antibody *antibody);
@@ -31,12 +32,14 @@ public:
     bool nonNeiborhsSwap(Antibody *antibody);
     bool opositeSideSwap(Antibody *antibody);
 
+
     void PathR(Antibody *antibody);
 
 
     void printPopulation();
     void printClones();
     void printAll();
+    void testAllPopulation();
 
     //Atributos;
     Config* config;

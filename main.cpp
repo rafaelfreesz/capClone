@@ -10,11 +10,12 @@ using namespace std;
 
 void testSolution();
 int main() {
-    //testSolution();
-    vector<Instance*> instances = Utils::loadInstances();
+    //testSolution();exit(0);
+
+    vector<Instance*> instances = Utils::loadInstances("Instances/Instances");
     //500, 5000, 0.2, 0.50, 0.1,30
-    Config* config = new Config(100, 500, 0.1, 0.2, 0.4,30);
-    Stats* stats= new Stats(instances.size(), config);
+    Config* config = new Config(10, 500, 0.9, 0.2, 0.1,30);
+    Stats* stats= new Stats((int)instances.size(), config);
 
 
     for(int i=0;i<instances.size();i++){
@@ -30,6 +31,8 @@ int main() {
             search->evolve();
             time=clock()-time;
 
+            search->testAllPopulation();
+
             stats->setStat(j, i, ((double) time / CLOCKS_PER_SEC), search->population[0]->cost);
 
             cout<<"time: "<<to_string(stats->getTime(j,i))<<"s | cost: "<< to_string(stats->getCost(j,i))<<endl;
@@ -39,7 +42,7 @@ int main() {
         }
 
         stats->printStats(instances.at(i)->name,i);
-        cout<<endl<<"RESUME: BEST TIME: "<<to_string(stats->bestTimes[i])<<"s | BEST COST: "<<to_string(stats->bestCosts[i])<<" | LitSol: "<<to_string(stats->litSol[i])<<" | GAP: "<<to_string(stats->gapsSol[i])<<endl<<endl;
+        cout<<endl<<"RESUME: AVG TIME: "<<to_string(stats->avgTimes[i])<<"s | BEST COST: "<<to_string(stats->bestCosts[i])<<" | LitSol: "<<to_string(stats->litSol[i])<<" | GAP: "<<to_string(stats->gapsSol[i])<<endl<<endl;
 
     }
 
@@ -53,7 +56,7 @@ int main() {
 
 void testSolution(){
 
-    vector<Instance*> instances=Utils::loadInstances();
+    vector<Instance*> instances= Utils::loadInstances("Instances/Instances");
 
     string instanceName="S9";
     Instance* instance;
@@ -69,6 +72,30 @@ void testSolution(){
     layout->layout=corridor;
     layout->p=5;
     layout->calculateSolution();
+
+    int k=1;
+    for(int i=0;i<layout->p-1;i++){
+        while(i+k<layout->p-1) {
+            for (int j = i + k; j < layout->p; j++) {
+                //layout->sameSideCalc(i, j);
+                layout->swapFacility(i, j);
+                layout->testCalculation();
+            }
+            k++;
+        }
+    }
+    k=1;
+    for(int i=layout->p;i<layout->instance->n-1;i++){
+        while(i+k<layout->instance->n-1) {
+            for (int j = i + k; j < layout->p; j++) {
+                //layout->sameSideCalc(i, j);
+                layout->swapFacility(i, j);
+                layout->testCalculation();
+            }
+            k++;
+        }
+    }
+
     layout->print();
 
     exit(0);

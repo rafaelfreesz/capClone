@@ -17,7 +17,9 @@ public:
     void swapFacility(int i, int j);
     void shake(int size);
     void adjustP();
+
     Antibody* clone();
+    void clone(Antibody* targetClone);
 
     void calculateAbcissa();
     void calculatCost();
@@ -40,6 +42,9 @@ public:
     double cost;
     bool improved;
     Instance* instance;
+
+    //calculation testing fucntions
+    void sameSideCalc(int iMin, int iMax);
 };
 
 

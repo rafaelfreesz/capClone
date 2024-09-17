@@ -6,12 +6,10 @@
 #include "Utils.h"
 #include "Antibody.h"
 
-vector <Instance*> Utils::loadInstances() {
+vector<Instance *> Utils::loadInstances(string strFileName) {
     vector<Instance*> instances;
-    string strFileName, line;
+    string line;
     ifstream fileInstName;
-
-    strFileName="Instances/Instances";
 
     fileInstName.open(strFileName.c_str());
 

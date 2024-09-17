@@ -115,12 +115,13 @@ void Stats::printHeader(Config *config) {
 
     this->statsFile<<"pSize: "<<config->pSize<<endl;
     this->statsFile<<"gen: "<<config->gen<<endl;
-    this->statsFile << "nClonalSelection: " << config->memorySetSize << endl;
+    this->statsFile << "memorySetSizen: " << config->memorySetSize << endl;
     this->statsFile<<"betaCoeff: "<<config->betaCoeff<<endl;
     this->statsFile<<"clonePop: "<<config->clonePop<<endl;
     this->statsFile<<"arraySize: "<<config->arraySize<<endl;
     this->statsFile << "regQty: " << config->regenerationQty << endl;
     this->statsFile<<"seed: \n\t";
+
     for(int i=0;i<config->executions; i++){
         this->statsFile<<config->seeds[i]<<" ";
     }

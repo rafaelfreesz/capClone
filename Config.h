@@ -21,8 +21,7 @@ public:
         this->executions=execs;
         this->clonesPerI= nullptr;
 
-        srand(0);
-        //srand(clock());
+        srand(clock());
         this->seeds=new long [execs];
         for(int i=0;i<execs;i++){
             this->seeds[i]=rand();
@@ -41,18 +40,45 @@ public:
 
     void countClonalSelection(){
 
-        this->clonesPerI=new int [this->memorySetSize];
+        /*this->clonesPerI=new int [this->memorySetSize];
         this->clonePop=0;
 
         int betaN=this->betaCoeff*this->pSize;
-
+        //TODO usar round e encerrar quando round<1
+        int clones;
         for(int i=0;i<this->memorySetSize; i++){
 
             int clones= max(1,betaN / (i+1));
             this->clonesPerI[i]=clones;
             this->clonePop+=clones;
+        }*/
+
+        vector<int> clonesPerIVector;
+        this->memorySetSize=0;
+        int clones=this->pSize;
+        int pos=1;
+        double div;
+
+        while(clones>0 && pos<this->pSize){
+            clonesPerIVector.push_back(clones);
+            div=(double)clones/++pos;
+            clones= (int)round(div);
         }
+
+        this->memorySetSize=(int)clonesPerIVector.size();
+        this->clonesPerI=new int [this->memorySetSize];
+
+        this->clonePop=0;
+
+        for(int i=0;i<clonesPerIVector.size();i++){
+            this->clonePop+=clonesPerIVector.at(i);
+            this->clonesPerI[i]=clonesPerIVector.at(i);
+        }
+
+        this->betaCoeff=(double)this->clonePop/this->pSize;
+
     }
+
     void print(){
         cout<<"pSize: "<<pSize<<endl;
         cout<<"gen: "<<gen<<endl;

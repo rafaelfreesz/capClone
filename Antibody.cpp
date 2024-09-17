@@ -42,24 +42,28 @@ Antibody *Antibody::clone() {
     return agClone;
 }
 
-//Ajusta o valor de p balanceado
+void Antibody::clone(Antibody *targetClone) {
+
+    targetClone->p=this->p;
+    targetClone->cost=this->cost;
+    targetClone->improved=this->improved;
+
+    for(int i=0;i<this->instance->n;i++){
+        targetClone->abcissa[i]=this->abcissa[i];
+        targetClone->layout[i]=this->layout[i];
+    }
+}
+
+//Ajusta o valor de p balanceado TODO tentar verificar pelos dois lados
 void Antibody::adjustP() {
     this->p=0;
     double layoutLength=0.0;
-
     float halfLayoutLenght=this->instance->layoutLengh/2;
 
     while(layoutLength<halfLayoutLenght){
         layoutLength+=this->instance->lengths[this->layout[++this->p]];
     }
 }
-//Bagunça o layout
-void Antibody::shake(int size) {
-    for(int i=0;i<this->instance->n;i++){
-        swapFacility(rand() % this->instance->n, rand() % this->instance->n);
-    }
-}
-
 
 void Antibody::calculateAbcissa() {
 
@@ -462,6 +466,108 @@ void Antibody::testCalculation() {
 
     delete clone;
 
+}
+
+void Antibody::sameSideCalc(int iMin, int iMax) {
+    int iMinFacility=this->layout[iMin];
+    int iMaxFacility=this->layout[iMax];
+
+    double iMinNewAbcissa=this->abcissa[iMaxFacility]-this->instance->halfLengths[iMinFacility]+this->instance->halfLengths[iMaxFacility];
+    double iMaxNewAbcissa=this->abcissa[iMinFacility]-this->instance->halfLengths[iMinFacility]+this->instance->halfLengths[iMaxFacility];
+
+    int zoneLimits[8]; //{zone1,zone2,zone3,zone4} *Zone 2 may not exist
+    //Setting Zone Limits
+    if(iMinFacility<this->p){
+        zoneLimits[0]=0;
+        zoneLimits[1]=iMin;           //Zone 1 =[0,..,iMin)
+        zoneLimits[2]=iMin+1;
+        zoneLimits[3]=iMax;             //Zone 2 =[iMin+1,...,iMax)
+        zoneLimits[4]=iMax+1;
+        zoneLimits[5]=this->p;          //Zone 3= [iMax+1,...,p)
+        zoneLimits[6]=this->p;
+        zoneLimits[7]=this->instance->n;   //Zone 4= [p,...,assigned)
+    }else{
+        zoneLimits[0]=this->p;
+        zoneLimits[1]=iMin;           //Zone 1 =[p,..,iMin)
+        zoneLimits[2]=iMin+1;
+        zoneLimits[3]=iMax;             //Zone 2 =[iMin+1,...,iMax)
+        zoneLimits[4]=iMax+1;
+        zoneLimits[5]=this->instance->n;   //Zone 3= [iMax+1,...,assigned)
+        zoneLimits[6]=0;
+        zoneLimits[7]=this->p;          //Zone 3= [0,...,p)
+    }
+
+    float deltaDist, deltaCost;
+    int iFacility, jFacility;
+    //Delta calculating by iMin & iMax with zones 1, 3, and 4
+    int z=0;
+    while(z<8){
+        for(int i=zoneLimits[z];i<zoneLimits[z+1];i++){
+            iFacility=this->layout[i];
+
+            //iMin x zone z
+            deltaDist=abs(iMinNewAbcissa-this->abcissa[iFacility])-abs(this->abcissa[iMinFacility]-this->abcissa[iFacility]);
+            deltaCost=deltaDist*this->instance->demands[iMinFacility][iFacility];
+            this->cost+=deltaCost;
+
+            //iMax x zone z
+            deltaDist=abs(iMaxNewAbcissa-this->abcissa[iFacility])-abs(this->abcissa[iMaxFacility]-this->abcissa[iFacility]);
+            deltaCost=deltaDist*this->instance->demands[iMaxFacility][iFacility];
+            this->cost+=deltaCost;
+        }
+
+        if(z==0){
+            z+=4;
+        }else{
+            z+=2;
+        }
+    }
+
+    //Delta calculating by zone 2 with iMin & iMax *Zone 2 may not exist
+    double zone2Delta=(float)(this->instance->lengths[iMaxFacility]-this->instance->lengths[iMinFacility]);
+    for(int i=zoneLimits[2];i<zoneLimits[3];i++){
+        iFacility=this->layout[i];
+
+        //zone 2 -> iMin
+        deltaDist=abs(iMinNewAbcissa-(this->abcissa[iFacility]+zone2Delta))-abs(this->abcissa[iMinFacility]-this->abcissa[iFacility]);
+        deltaCost=deltaDist*this->instance->demands[iMinFacility][iFacility]; //TODO maybe detacost+= and this->cost+= at the end
+        this->cost+=deltaCost;
+
+        //zone 2 -> iMax
+        deltaDist=abs(iMaxNewAbcissa-(this->abcissa[iFacility]+zone2Delta))-abs(this->abcissa[iMaxFacility]-this->abcissa[iFacility]);
+        deltaCost=deltaDist*this->instance->demands[iMaxFacility][iFacility];
+        this->cost+=deltaCost;
+
+        //Delta calculating by zone 2 with zones 1, 3 and 4 TODO needed only if l(iMinFacility)!= l(iMaxFacility)
+        if(zone2Delta!=0.0) {
+            z = 0;
+            while (z < 8) {
+
+                for (int j = zoneLimits[z]; j < zoneLimits[z + 1]; j++) {
+                    jFacility = this->layout[j];
+                    deltaDist = abs(this->abcissa[jFacility] - (this->abcissa[iFacility] + zone2Delta)) -
+                                abs(this->abcissa[jFacility] - this->abcissa[iFacility]);
+                    deltaCost = deltaDist * this->instance->demands[iFacility][jFacility];
+                    this->cost += deltaCost;
+                }
+
+                if (z == 0) {
+                    z += 4;
+                } else {
+                    z += 2;
+                }
+            }
+        }
+    }
+
+    //UpdatingAbcissa //TODO PAREI AQUI
+    this->abcissa[iMaxFacility]=iMaxNewAbcissa;
+    this->abcissa[iMinFacility]=iMinNewAbcissa;
+
+    float deltaAbcissa = this->instance->lengths[iMaxFacility]-this->instance->lengths[iMinFacility];
+    for(int i=iMin+1;i<iMax;i++){
+        this->abcissa[this->layout[i]]+=deltaAbcissa;
+    }
 }
 
 
